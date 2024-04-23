@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React, { useState, useEffect } from "react";
+import SearchBar from "./Components/Search";
+import WeatherCard from "./Components/WeatherCard";
 
-function App() {
+export default function App() {
+  const [weatherData, setWeatherData] = useState(null);
+  const [query, setQuery] = useState("");
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        if (query) {
+          const apiKey = "598bf0a0109d4d201c0228e96115fd92";
+          const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${apiKey}`);
+          if (!response.ok) {
+            throw new Error("City not found");
+          }
+          const data = await response.json();
+          if (!data.main || !data.weather || data.weather.length === 0) {
+            throw new Error("Invalid weather data");
+          }
+          setWeatherData({
+            city: data.name,
+            temperature: data.main.temp,
+            description: data.weather[0].description,
+          });
+          setError(null);
+        }
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+        setError(error.message);
+        setWeatherData(null);
+      }
+    };
+
+    fetchWeatherData();
+  }, [query]);
+
+  const handleSearch = (city) => {
+    setQuery(city);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex justify-center items-center h-screen">
+      <div className="text-center">
+        <SearchBar onSearch={handleSearch} />
+        {error && <p className="text-red-500">{error}</p>}
+        {weatherData && (
+          <WeatherCard
+            city={weatherData.city}
+            temperature={Math.round(weatherData.temperature - 273.15)}
+            description={weatherData.description}
+          />
+        )}
+      </div>
     </div>
   );
 }
-
-export default App;
