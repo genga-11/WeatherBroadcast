@@ -14,15 +14,15 @@ export default function SearchBar({ onSearch }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mb-2">
       <input
         type="text"
         value={query}
         onChange={handleChange}
         placeholder="Enter city name"
-        className="border border-gray-300 rounded-full text-center p-2"
+        className="border border-gray-300  rounded text-center p-2"
       />
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2">
+      <button type="submit" className="bg-gray-900 text-white px-4 py-2 rounded-md ml-2">
         Search
       </button>
     </form>
