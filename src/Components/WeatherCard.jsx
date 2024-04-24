@@ -12,6 +12,28 @@ const WeatherCard = ({ city, temperature, description }) => {
     setUnit(e.target.value);
   };
 
+  const calculateWindSpeed = (temperature) => {
+    // Adjust wind speed based on temperature
+    // Example formula: wind speed increases by 1 m/s for every 10°C increase in temperature
+    const windSpeedInMps = (temperature / 10) * 1.0; // Calculate wind speed in m/s
+    return Math.round(windSpeedInMps * 3.6); // Convert wind speed to km/h
+  };
+
+  const calculateVisibility = (temperature) => {
+    // Example formula: visibility decreases by 1 km for every 5°C increase in temperature
+    const baseVisibility = 10; // Initial visibility value in km
+    const visibilityDecreaseRate = 1; // Visibility decrease rate per 5°C increase in temperature
+    const temperatureDifferenceFromBase = temperature - 20; // Calculate difference from base temperature
+    return Math.max(baseVisibility - Math.floor(temperatureDifferenceFromBase / 5) * visibilityDecreaseRate, 0); // Ensure visibility is non-negative
+  };
+  const calculateHumidity = (temperature) => {
+    // Example formula: humidity decreases by 2% for every 10°C increase in temperature
+    const baseHumidity = 70; // Initial humidity value
+    const humidityChangeRate = 2; // Humidity decrease rate per 10°C increase in temperature
+    const temperatureDifferenceFromBase = temperature - 20; // Calculate difference from base temperature
+    return Math.max(baseHumidity - Math.floor(temperatureDifferenceFromBase / 10) * humidityChangeRate, 0); // Ensure humidity is non-negative
+  };
+
   return (
     // <div className="bg-white p-4 rounded-lg shadow-md mt-4">
     //   <h2 className="text-xl font-semibold">{city}</h2>
@@ -51,31 +73,45 @@ const WeatherCard = ({ city, temperature, description }) => {
           </svg>
         </div>
         <div className="flex flex-row items-center justify-center mt-6">
-          <div className="font-medium text-6xl">{temperature}°</div>
-          <div className="flex flex-col items-center ml-6">
+        <div className="font-medium text-4xl mb-2">{unit === "celsius" ? Math.round(temperature) : Math.round(convertToFahrenheit(temperature))}</div>
+          <div className="  font-medium text-4xl mb-3">{unit === "celsius" ? "°C" : "°F"}</div>
+          <div className="flex flex-col items-center ml-6 mb-2">
             <div>{description}</div>
-            <div className="mt-1">
-              <span className="text-sm"><i className="far fa-long-arrow-up"></i></span>
-              <span className="text-sm font-light text-gray-500">28°C</span>
-            </div>
-            <div>
-              <span className="text-sm"><i className="far fa-long-arrow-down"></i></span>
-              <span className="text-sm font-light text-gray-500">20°C</span>
-            </div>
+            <div className="flex flex-row items-center justify-center mt-2">
+          {/* Option to change temperature unit */}
+          <input
+            type="radio"
+            id="celsius"
+            value="celsius"
+            checked={unit === "celsius"}
+            onChange={handleUnitChange}
+            className="mr-1 mt-1"
+          />
+          <label htmlFor="celsius">Celsius</label>
+          <input
+            type="radio"
+            id="fahrenheit"
+            value="fahrenheit"
+            checked={unit === "fahrenheit"}
+            onChange={handleUnitChange}
+            className="ml-3 mr-1 mt-1"
+          />
+          <label htmlFor="fahrenheit">Fahrenheit</label>
+        </div>
           </div>
         </div>
         <div className="flex flex-row justify-between mt-6">
           <div className="flex flex-col items-center">
             <div className="font-medium text-sm">Wind</div>
-            <div className="text-sm text-gray-500">9k/h</div>
+            <div className="text-sm text-gray-500">{calculateWindSpeed(temperature)} km/h</div>
           </div>
           <div className="flex flex-col items-center">
             <div className="font-medium text-sm">Humidity</div>
-            <div className="text-sm text-gray-500">68%</div>
+            <div className="text-sm text-gray-500">{calculateHumidity(temperature)}%</div>
           </div>
           <div className="flex flex-col items-center">
             <div className="font-medium text-sm">Visibility</div>
-            <div className="text-sm text-gray-500">10km</div>
+            <div className="text-sm text-gray-500">{calculateVisibility(temperature)} km</div>
           </div>
         </div>
       </div>
