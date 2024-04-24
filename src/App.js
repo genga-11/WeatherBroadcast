@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import SearchBar from "./Components/Search";
 import WeatherCard from "./Components/WeatherCard";
-import EmptyCard from "./Components/EmptyCard";
 
 export default function App() {
   const [weatherData, setWeatherData] = useState(null);
@@ -53,14 +52,14 @@ export default function App() {
       <div className="text-center">
         <SearchBar onSearch={handleSearch} />
         {error && <p className="text-red-500">{error}</p>}
-        {weatherData ? (
+        {weatherData && (
         <WeatherCard
           city={weatherData.city}
           temperature={Math.round(weatherData.temperature - 273.15)}
           description={weatherData.description}
         />
-      ) : (
-        <EmptyCard/>
+     
+        
       )}
       </div>
     </div>
