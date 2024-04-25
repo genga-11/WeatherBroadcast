@@ -1,5 +1,6 @@
-// WeatherCard.js
+
 import React, { useState } from "react";
+
 
 export default function WeatherCard  ({ city, temperature, description,country }) {
   const [unit, setUnit] = useState("celsius");
@@ -34,12 +35,34 @@ export default function WeatherCard  ({ city, temperature, description,country }
     return temperature <= 18 ? "/images/cold.png" : temperature > 18 && temperature < 38 ? "/images/cloudy.png" : "/images/sunny.png";
   };
 
+
+  const handleSaveCity = () => {
+    const savedCities = JSON.parse(localStorage.getItem("savedCities")) || [];
+  
+    const isCitySaved = savedCities.some(savedCity => savedCity === city);
+  
+    if (!isCitySaved) {
+      const updatedSavedCities = [...savedCities, city];
+            localStorage.setItem("savedCities", JSON.stringify(updatedSavedCities));
+  
+      console.log("City saved:", city);
+      alert(` ${city} saved successfully!`);
+    } else {
+      alert(` ${city} is already saved!`);
+    }
+  };
   const weatherIcon = selectWeatherIcon(temperature);
   return (
    
-
-    <div className=" flex items-center justify-center shadow-xl  ">
+<>
+    <div className=" flex items-center justify-center shadow-xl backdrop-blur-xl ">
       <div className="flex flex-col bg-gray-200 rounded p-4  max-w-xs w-full">
+      <div className="grid justify-items-end" onClick={handleSaveCity}>
+      <svg data-slot="icon" className="h-6 w-6" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"></path>
+</svg>
+        </div>
         <div className="font-bold  text-gray-900 text-xl mt-2">{city},{country}</div>
         <div className="text-sm text-gray-500 mt-1">{new Date().toDateString()}</div>
         <div className="mt-6 text-6xl self-center inline-flex items-center justify-center rounded-lg text-indigo-400 h-24 w-24">
@@ -89,7 +112,7 @@ export default function WeatherCard  ({ city, temperature, description,country }
           </div>
         </div>
       </div>
-    </div>
+    </div></>
   );
 };
 

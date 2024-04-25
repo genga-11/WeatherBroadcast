@@ -50,6 +50,8 @@ export default function WeatherData() {
     setLocation(city);
   };
 
+  
+
   return (
     <>
      <Navbar/>
