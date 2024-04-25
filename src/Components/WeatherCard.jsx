@@ -57,7 +57,7 @@ export default function WeatherCard  ({ city, temperature, description,country }
 <>
     <div className=" flex items-center justify-center shadow-xl backdrop-blur-xl ">
       <div className="flex flex-col bg-gray-200 rounded p-4  max-w-xs w-full">
-      <div className="grid justify-items-end" onClick={handleSaveCity}>
+      <div className="grid justify-items-end cursor-pointer" onClick={handleSaveCity}>
       <svg data-slot="icon" className="h-6 w-6" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"></path>

@@ -60,7 +60,7 @@ export default function WeatherData() {
      
       <div className="text-center">
         <SearchBar onSearch={handleSearch} />
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 text-center text-xl font-medium mt-4">{error}</p>}
         {weatherData && (
         <WeatherCard
           city={weatherData.city}
